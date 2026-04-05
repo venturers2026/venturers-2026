@@ -2,7 +2,7 @@
 import nodemailer from 'nodemailer';
 // Pull from env variables, with fallbacks just in case
 const smtpHost = process.env.SMTP_HOST || 'smtp.gmail.com';
-const smtpPort = parseInt(process.env.SMTP_PORT || '465', 10);
+const smtpPort = parseInt(process.env.SMTP_PORT || '587', 10);
 
 // Dictionary mapping DB event names to WhatsApp links
 const WHATSAPP_LINKS: Record<string, string> = {
@@ -20,7 +20,8 @@ const WHATSAPP_LINKS: Record<string, string> = {
 const transporter = nodemailer.createTransport({
     host: smtpHost,
     port: smtpPort,
-    secure: smtpPort === 465, // Automatically true if port is 465 (SSL), false if 587 (TLS)
+    secure: false, // Automatically true if port is 465 (SSL), false if 587 (TLS)
+    requireTLS: true,
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
