@@ -94,10 +94,10 @@ export const verifyParticipant = async (req: AuthRequest, res: Response): Promis
                 );
                 emailStatus = 'Sent successfully';
             } catch (emailError) {
-                console.error('Failed to send verification email:', emailError);
+                console.error('\n❌ Failed to send verification email for ID:', participant.id);
+                console.error(emailError);
+                console.error('-----------------------------------------\n');
                 emailStatus = 'Failed to send';
-                // Note: We don't throw an error here because the DB update was successful.
-                // We just want to warn the admin that the email failed.
             }
         }
 

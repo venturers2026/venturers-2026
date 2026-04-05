@@ -1,5 +1,8 @@
 // utils/mailer.ts
 import nodemailer from 'nodemailer';
+// Pull from env variables, with fallbacks just in case
+const smtpHost = process.env.SMTP_HOST || 'smtp.gmail.com';
+const smtpPort = parseInt(process.env.SMTP_PORT || '465', 10);
 
 // Dictionary mapping DB event names to WhatsApp links
 const WHATSAPP_LINKS: Record<string, string> = {
@@ -15,7 +18,9 @@ const WHATSAPP_LINKS: Record<string, string> = {
 
 // Configure the email transporter
 const transporter = nodemailer.createTransport({
-    service: 'gmail', // Change this if you use Outlook, SendGrid, etc.
+    host: smtpHost,
+    port: smtpPort,
+    secure: smtpPort === 465, // Automatically true if port is 465 (SSL), false if 587 (TLS)
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
