@@ -3,7 +3,6 @@ import { Admin } from '../models/Admin';
 import { Participant } from '../models/Participant';
 import { Permission } from '../types/enums';
 import { type AuthRequest } from '../middlewares/auth';
-import { sendVerificationEmail } from '../utils/mailer';
 
 // Required Permission: SHARE_ACCESS
 export const getPendingRequests = async (req: AuthRequest, res: Response) => {
@@ -76,35 +75,12 @@ export const verifyParticipant = async (req: AuthRequest, res: Response): Promis
         const participant = await Participant.findOne({ id: participantId });
         if (!participant) return res.status(404).json({ error: 'Participant not found' });
 
-        // Check previous status before toggling
-        const wasVerifiedBefore = participant.isVerified;
-        
         participant.isVerified = !participant.isVerified;
         await participant.save();
 
-        let emailStatus = 'Not sent (unverifying)';
-
-        // Only send email if they are newly verified
-        if (!wasVerifiedBefore && participant.isVerified) {
-            try {
-                await sendVerificationEmail(
-                    participant.email, 
-                    participant.firstName, 
-                    participant.eventsApplied
-                );
-                emailStatus = 'Sent successfully';
-            } catch (emailError) {
-                console.error('\n❌ Failed to send verification email for ID:', participant.id);
-                console.error(emailError);
-                console.error('-----------------------------------------\n');
-                emailStatus = 'Failed to send';
-            }
-        }
-
-        res.json({ 
-            message: 'Participant verification status toggled', 
-            emailStatus: emailStatus,
-            participant: participant.toJSON() 
+        res.json({
+            message: 'Participant verification status toggled',
+            participant: participant.toJSON()
         });
     } catch (err) {
         console.error(err);

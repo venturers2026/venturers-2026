@@ -11,13 +11,13 @@ const eventsList = [
   { 
     id: 'sharktank', day: 'day1', dayLabel: 'Day 1 — Apr 10', num: '01', tag: 'Flagship', title: 'Shark Tank', 
     desc: 'Pitch your startup to a panel of real Sharks. Convince investors and industry experts. Bring your deck, own the room.', 
-    fee: 'Registration: ₹99  ·  Trophy + Prize Money', delay: '0s',
+    fee: 'Registration: ₹99  ·  Prize: ₹1,000 + Trophy', delay: '0s',
     icon: sharkTankImg 
   },
   { 
     id: 'wallst', day: 'day2', dayLabel: 'Day 1 — Apr 10', num: '02', tag: 'Finance', title: 'Wolf of Wall Street', 
     desc: 'Live stock market simulation. Buy, sell, react to market events — build the strongest portfolio and claim the throne.', 
-    fee: 'Registration: ₹149  ·  Prize Pool: ₹1,500', delay: '.30s',
+    fee: 'Registration: ₹99  ·  Prize Pool: ₹1,700', delay: '.30s',
     icon: wallstImg 
   },
   { 
@@ -35,19 +35,19 @@ const eventsList = [
   { 
     id: 'zerotone', day: 'day1', dayLabel: 'Day 2 — Apr 11', num: '05', tag: 'Makeathon', title: 'Zero to One', 
     desc: 'Build a viable startup concept across 3 elimination rounds — Blueprint, Beta Users, and a live Demo Day inspired by Y Combinator.', 
-    fee: 'Registration: ₹199  ·  Prize Pool: ₹5,000', delay: '.06s',
+    fee: 'Registration: ₹149  ·  Prize Pool: ₹5,000', delay: '.06s',
     icon: zerotoneImg 
   },
   { 
     id: 'cric', day: 'day2', dayLabel: 'Day 2 — Apr 11', num: '06', tag: 'Strategy', title: 'Cric Auction', 
     desc: 'IPL-inspired bidding game. Use your budget to build a dream team from real IPL stats — strategy, intuition, and nerve win the day.', 
-    fee: 'Registration: ₹199  ·  Prize: ₹700', delay: '.24s',
+    fee: 'Registration: ₹149  ·  Prize: ₹600', delay: '.24s',
     icon: cricImg 
   },
   { 
     id: 'gob', day: 'day2', dayLabel: 'Day 2 — Apr 11', num: '07', tag: 'Debate', title: 'Game of Brands', 
     desc: 'Teams of three defend their secret brand in a high-stakes Brand War. Audience votes in prelims; judges crown the champions.', 
-    fee: 'Registration: ₹149  ·  Prize Pool: ₹1,800', delay: '.18s',
+    fee: 'Registration: ₹149  ·  Prize Pool: ₹1,700', delay: '.18s',
     icon: gobImg 
   }
 ];

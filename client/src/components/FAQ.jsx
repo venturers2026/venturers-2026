@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 
 const faqs = [
   { q: "Who can participate in VENTURERS 2026?", a: "VENTURERS 2026 is open to all undergraduate and postgraduate students from any college across Pune. No prior entrepreneurship experience is required — just a willingness to learn and compete." },
-  { q: "Is there a registration fee?", a: "Most events have a nominal registration fee: Shark Tank ₹100, Zero to One ₹200, Thrones of Wall Street ₹150, Game of Brands ₹150, Cric Auction ₹200. The Guest Session and Chai Pe Charcha! are completely free and open to all." },
+  { q: "Is there a registration fee?", a: "Most events have a nominal registration fee: Shark Tank ₹99, Zero to One ₹149, Wolf of Wall Street ₹99, Game of Brands ₹149, Cric Auction ₹149. The Guest Session and Chai Pe Charcha! are completely free and open to all." },
   { q: "Can I register for multiple events?", a: "Yes, you can register for multiple events using the cart system. Browse the events, add your preferred ones to your cart, and complete a single registration for all of them. Note that some events have timing overlaps, so plan accordingly." },
   { q: "What should I bring for Shark Tank?", a: "For Shark Tank, you'll need a prepared pitch deck (we'll share a template post-registration), your idea clearly defined across problem, solution, market, revenue model and team. A laptop or printed deck is recommended." },
   { q: "What is the team size for each event?", a: "Shark Tank: 1–4 members · Zero to One: 2–4 members · Game of Brands: exactly 3 members · Cric Auction: individual or pairs · Thrones of Wall Street: 2–3 members · Chai Pe Charcha & Guest Session: individual." },
-  { q: "What is the total prize pool?", a: "The total prize money to be distributed is ₹10,000 — spread across Shark Tank (₹700 + Trophy), Zero to One (₹5,000), Game of Brands (₹1,800), Thrones of Wall Street (₹1,500), and Cric Auction (₹700)." },
+  { q: "What is the total prize pool?", a: "The total prize money to be distributed is ₹10,000 — spread across Shark Tank (₹1,000 + Trophy), Zero to One (₹5,000), Game of Brands (₹1,700), Wolf of Wall Street (₹1,700), and Cric Auction (₹600)." },
   { q: "Will certificates be provided?", a: "Yes! All participants will receive a digital participation certificate. Winners and runners-up will receive special merit certificates along with their prizes at the closing ceremony." },
 ];
 
