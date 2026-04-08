@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import sharkTankImg from '../assets/sharktank.jpeg';
 import wallstImg from '../assets/wallst.jpeg';
 import chaiImg from '../assets/chai.jpeg';
@@ -6,6 +6,8 @@ import guestImg from '../assets/guest.jpeg';
 import zerotoneImg from '../assets/zerotone.jpeg';
 import cricImg from '../assets/cric.jpeg';
 import gobImg from '../assets/gob.jpeg';
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
 
 const eventsList = [
   { 
@@ -53,6 +55,15 @@ const eventsList = [
 ];
 
 export default function Events({ openModal, addToCart, cart }) {
+  const [availability, setAvailability] = useState({});
+
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/api/participants/availability`)
+      .then(res => res.json())
+      .then(data => setAvailability(data))
+      .catch(err => console.error("Failed to fetch availability", err));
+  }, []);
+
   return (
     <section id="events">
       <div className="container">
@@ -65,6 +76,10 @@ export default function Events({ openModal, addToCart, cart }) {
         <div className="events-grid">
           {eventsList.map(ev => {
             const inCart = cart.find(c => c.id === ev.id);
+            const eventAvail = availability[ev.title];
+            
+            const isFull = eventAvail && eventAvail.available <= 0;
+            const isLow = eventAvail && eventAvail.available > 0 && eventAvail.available <= 5; // Trigger fast warning
 
             return (
               <div key={ev.id} className="ev-card reveal" style={{ transitionDelay: ev.delay }}>
@@ -75,13 +90,20 @@ export default function Events({ openModal, addToCart, cart }) {
                 <h3>{ev.title}</h3>
                 <p>{ev.desc}</p>
                 <div className="ev-fee">{ev.fee}</div>
-                <div className="ev-actions">
+                
+                {/* DYNAMIC AVAILABILITY MESSAGES */}
+                {isFull && <div style={{ color: '#ff4d4d', fontWeight: 'bold', marginTop: '10px' }}>Registrations Closed</div>}
+                {isLow && <div style={{ color: '#ff9800', fontWeight: 'bold', marginTop: '10px' }}>Register fast, only {eventAvail.available} spots left!</div>}
+
+                <div className="ev-actions" style={{ marginTop: '15px' }}>
                   <button className="ev-more" onClick={() => openModal(ev.id)}>Learn More <span>→</span></button>
                   <button 
                     className={`ev-add-cart ${inCart ? 'added' : ''}`} 
-                    onClick={() => !inCart && addToCart(ev.id, ev.title, ev.dayLabel)}
+                    onClick={() => !inCart && !isFull && addToCart(ev.id, ev.title, ev.dayLabel)}
+                    disabled={isFull}
+                    style={{ opacity: isFull ? 0.5 : 1, cursor: isFull ? 'not-allowed' : 'pointer' }}
                   >
-                    {inCart ? '✓ Added' : '+ Add'}
+                    {inCart ? '✓ Added' : (isFull ? 'Closed' : '+ Add')}
                   </button>
                 </div>
               </div>

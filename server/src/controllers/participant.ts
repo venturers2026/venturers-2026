@@ -4,8 +4,36 @@ import { Participant } from '../models/Participant';
 import { PassTier } from '../types/enums';
 import { getNextSequence } from '../utils/nextSequence';
 
+// 1. Define event limits
+const EVENT_LIMITS: Record<string, number> = {
+    'Wolf of Wall Street': 20, // Stock Market
+    'Cric Auction': 18,
+    'Shark Tank': 14,
+    'Game of Brands': 16,
+    'Zero to One': 30,
+};
+
+// 2. New endpoint to fetch current availability
+export const getEventAvailability = async (req: Request, res: Response) => {
+    try {
+        const availability: Record<string, { limit: number, registered: number, available: number }> = {};
+
+        for (const [eventName, limit] of Object.entries(EVENT_LIMITS)) {
+            const count = await Participant.countDocuments({ eventsApplied: eventName });
+            availability[eventName] = {
+                limit,
+                registered: count,
+                available: Math.max(0, limit - count)
+            };
+        }
+
+        return res.status(200).json(availability);
+    } catch (error) {
+        return res.status(500).json({ error: 'Failed to fetch event availability' });
+    }
+};
+
 export const registerParticipant = async (req: Request, res: Response) => {
-    // 1. ADD paymentSSLink back into the destructuring from req.body
     const { email, firstName, lastName, institute, phoneNumber, passTier, eventsApplied, billingAmount, paymentSSLink } = req.body;
 
     try {
@@ -33,16 +61,23 @@ export const registerParticipant = async (req: Request, res: Response) => {
             return res.status(400).json({ error: 'At least one event must be selected.' });
         }
 
+        // 3. CHECK LIMITS BEFORE REGISTERING
+        for (const event of normalizedEventsApplied) {
+            if (EVENT_LIMITS[event] !== undefined) {
+                const count = await Participant.countDocuments({ eventsApplied: event });
+                if (count >= EVENT_LIMITS[event]) {
+                    return res.status(400).json({ error: `Registrations are closed for "${event}" as it has reached its capacity limit.` });
+                }
+            }
+        }
+
         const normalizedBillingAmount = Number.parseFloat(String(billingAmount));
         if (!Number.isFinite(normalizedBillingAmount) || normalizedBillingAmount < 0) {
             return res.status(400).json({ error: 'Invalid billing amount.' });
         }
 
-        // 2. NEW CLOUDINARY LOGIC
-        // Grab the Cloudinary URL that your `uploadImage` middleware injected into req.body
         let normalizedPaymentSSLink = typeof paymentSSLink === 'string' ? paymentSSLink : '';
         
-        // Enforce that paid passes must have a screenshot URL
         if (normalizedBillingAmount > 0 && !normalizedPaymentSSLink) {
             return res.status(400).json({ error: 'Payment screenshot is required for paid passes.' });
         }
@@ -58,7 +93,7 @@ export const registerParticipant = async (req: Request, res: Response) => {
             passTier,
             eventsApplied: normalizedEventsApplied,
             billingAmount: normalizedBillingAmount,
-            paymentSSLink: normalizedPaymentSSLink, // 3. Save the Cloudinary URL to MongoDB
+            paymentSSLink: normalizedPaymentSSLink, 
         });
         
         return res.status(201).json(newParticipant);

@@ -53,6 +53,7 @@ export default function Register({ cart, removeFromCart, showToast }) {
   
   // New state to track if user is on the payment step
   const [isPaymentStep, setIsPaymentStep] = useState(false);
+  const [availability, setAvailability] = useState({});
 
   const [formValues, setFormValues] = useState({
     firstName: '',
@@ -95,6 +96,18 @@ export default function Register({ cart, removeFromCart, showToast }) {
   
   // Boolean to easily check if payment is needed
   const requiresPayment = billing.payable > 0;
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/api/participants/availability`)
+      .then(res => res.json())
+      .then(data => setAvailability(data))
+      .catch(err => console.error("Failed to fetch availability", err));
+  }, []);
+
+  // Determine if Premium Pass can be bought (Disable if ANY event is completely full)
+  const isPremiumAvailable = EVENT_CATALOG.every(ev => {
+    const avail = availability[ev.title];
+    return !avail || avail.available > 0;
+  });
 
   // Reset payment step if the cart becomes free
   useEffect(() => {
@@ -233,8 +246,14 @@ export default function Register({ cart, removeFromCart, showToast }) {
           <div className="reg-pass-wrap">
             <div className="reg-pass-head">Pass Tier</div>
             <div className="reg-pass-tabs">
-              <button type="button" className={`reg-pass-btn ${formValues.passTier === PASS_TIER.PREMIUM ? 'active' : ''}`} onClick={() => updateField('passTier', PASS_TIER.PREMIUM)}>
-                Premium Pass
+              <button 
+                type="button" 
+                className={`reg-pass-btn ${formValues.passTier === PASS_TIER.PREMIUM ? 'active' : ''}`} 
+                onClick={() => isPremiumAvailable && updateField('passTier', PASS_TIER.PREMIUM)}
+                disabled={!isPremiumAvailable}
+                style={{ opacity: isPremiumAvailable ? 1 : 0.6, cursor: isPremiumAvailable ? 'pointer' : 'not-allowed' }}
+              >
+                Premium Pass {!isPremiumAvailable && '(Unavailable)'}
               </button>
               <button type="button" className={`reg-pass-btn ${formValues.passTier === PASS_TIER.CUSTOMIZED ? 'active' : ''}`} onClick={() => updateField('passTier', PASS_TIER.CUSTOMIZED)}>
                 Customized Pass
@@ -248,6 +267,18 @@ export default function Register({ cart, removeFromCart, showToast }) {
           {formValues.passTier === PASS_TIER.CUSTOMIZED ? (
             <div className="reg-event-picker">
               <div className="reg-pass-head">Select Events</div>
+              
+              {/* Show fast-filling warnings near form */}
+              <div style={{ marginBottom: '10px' }}>
+                 {EVENT_CATALOG.map(ev => {
+                    const avail = availability[ev.title];
+                    if (avail && avail.available > 0 && avail.available <= 5) {
+                         return <div key={`warn-${ev.id}`} style={{ color: '#ff9800', fontSize: '0.85em', fontWeight: '500' }}>🔥 Hurry! {ev.title} only has {avail.available} spots left.</div>
+                    }
+                    return null;
+                 })}
+              </div>
+
               <div className="reg-event-controls">
                 <select
                   className="inp"
@@ -256,11 +287,19 @@ export default function Register({ cart, removeFromCart, showToast }) {
                   onChange={(event) => setEventToAdd(event.target.value)}
                 >
                   <option value="">Choose an event</option>
-                  {EVENT_CATALOG.filter((eventItem) => !selectedEventIds.includes(eventItem.id)).map((eventItem) => (
-                    <option key={eventItem.id} value={eventItem.id}>
-                      {eventItem.title} — {eventItem.fee > 0 ? `INR ${eventItem.fee}` : 'Free'}
-                    </option>
-                  ))}
+                  {EVENT_CATALOG.filter((eventItem) => !selectedEventIds.includes(eventItem.id)).map((eventItem) => {
+                    // Check availability for this dropdown item
+                    const avail = availability[eventItem.title];
+                    const isFull = avail && avail.available <= 0;
+                    const isLow = avail && avail.available > 0 && avail.available <= 5;
+                    const urgencyText = isFull ? ' [Closed]' : (isLow ? ` [Only ${avail.available} left]` : '');
+
+                    return (
+                      <option key={eventItem.id} value={eventItem.id} disabled={isFull}>
+                        {eventItem.title} — {eventItem.fee > 0 ? `INR ${eventItem.fee}` : 'Free'}{urgencyText}
+                      </option>
+                    );
+                  })}
                 </select>
                 <button type="button" className="reg-add-event-btn" onClick={addSelectedEvent}>Add Event</button>
               </div>
