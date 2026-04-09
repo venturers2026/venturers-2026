@@ -7,7 +7,7 @@ import { getNextSequence } from '../utils/nextSequence';
 // 1. Define event limits
 const EVENT_LIMITS: Record<string, number> = {
     'Wolf of Wall Street': 20, // Stock Market
-    'Cric Auction': 18,
+    'Cric Auction': 24,
     'Shark Tank': 14,
     'Game of Brands': 16,
     'Zero to One': 30,
@@ -77,7 +77,7 @@ export const registerParticipant = async (req: Request, res: Response) => {
         }
 
         let normalizedPaymentSSLink = typeof paymentSSLink === 'string' ? paymentSSLink : '';
-        
+
         if (normalizedBillingAmount > 0 && !normalizedPaymentSSLink) {
             return res.status(400).json({ error: 'Payment screenshot is required for paid passes.' });
         }
@@ -93,9 +93,9 @@ export const registerParticipant = async (req: Request, res: Response) => {
             passTier,
             eventsApplied: normalizedEventsApplied,
             billingAmount: normalizedBillingAmount,
-            paymentSSLink: normalizedPaymentSSLink, 
+            paymentSSLink: normalizedPaymentSSLink,
         });
-        
+
         return res.status(201).json(newParticipant);
     } catch (error) {
         if (error instanceof MongoServerError && error.code === 11000) {
