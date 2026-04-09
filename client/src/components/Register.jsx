@@ -1,26 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import paymentSSImg from '../assets/payment_ss.jpeg';
+import { EVENT_CATALOG, getEventById } from '../lib/eventCatalog';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
-
-const EVENT_CATALOG = [
-  { id: 'sharktank', title: 'Shark Tank', fee: 99 },
-  { id: 'zerotone', title: 'Zero to One', fee: 149 },
-  { id: 'chai', title: 'Chai Pe Charcha!', fee: 0 },
-  { id: 'gob', title: 'Game of Brands', fee: 149 },
-  { id: 'cric', title: 'Cric Auction', fee: 149 },
-  { id: 'wallst', title: 'Wolf of Wall Street', fee: 99 },
-  { id: 'guest', title: 'Speaker Session', fee: 0 }
-];
 
 const PASS_TIER = {
   PREMIUM: 'Premium',
   CUSTOMIZED: 'Customized'
 };
-
-function getEventById(eventId) {
-  return EVENT_CATALOG.find((eventItem) => eventItem.id === eventId);
-}
 
 function calculateBilling(passTier, selectedEventIds) {
   const selectedEvents = selectedEventIds

@@ -407,10 +407,13 @@ footer{background:var(--deep);border-top:1px solid rgba(232,184,75,.08);padding:
 .admin-ghost-btn{background:transparent;border:1px solid rgba(232,184,75,.25);color:var(--cream);padding:8px 14px;border-radius:3px;font-family:'Space Mono';font-size:10px;letter-spacing:1.2px;text-transform:uppercase;cursor:pointer;transition:all .2s}
 .admin-ghost-btn:hover{color:var(--gold);border-color:var(--gold);background:var(--gold-dim)}
 .admin-main{max-width:1180px;margin:0 auto;position:relative;z-index:1}
-.admin-section-head{margin-bottom:28px}
+.admin-section-head{margin-bottom:28px;display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.admin-section-copy{flex:1 1 520px;min-width:0}
 .admin-kicker{font-family:'Space Mono';font-size:9px;letter-spacing:2.6px;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
 .admin-section-head h1{font-family:'Playfair Display';font-size:clamp(30px,5vw,56px);line-height:1.04;color:var(--cream)}
 .admin-subtitle{font-size:14px;line-height:1.8;color:var(--muted);margin-top:10px;max-width:760px}
+.admin-logout-btn{background:var(--gold);border:1px solid var(--gold);color:var(--ink);padding:12px 18px;border-radius:6px;font-family:'Space Mono';font-size:10px;letter-spacing:1.4px;text-transform:uppercase;cursor:pointer;transition:all .2s;box-shadow:0 12px 24px rgba(232,184,75,.14)}
+.admin-logout-btn:hover{background:var(--gold2);border-color:var(--gold2);transform:translateY(-1px)}
 .admin-stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px}
 .admin-stat-card{background:var(--card);border:1px solid rgba(232,184,75,.12);border-radius:8px;padding:20px 22px}
 .admin-stat-card span{display:block;font-family:'Space Mono';font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-bottom:10px}
@@ -450,6 +453,16 @@ footer{background:var(--deep);border-top:1px solid rgba(232,184,75,.08);padding:
 .admin-perm-wrap{display:flex;flex-wrap:wrap;gap:8px}
 .admin-perm-pill{background:transparent;border:1px solid rgba(232,184,75,.25);color:var(--muted);padding:7px 10px;border-radius:100px;font-family:'Space Mono';font-size:9px;letter-spacing:1.2px;text-transform:uppercase;cursor:pointer;transition:all .2s}
 .admin-perm-pill.active{background:var(--gold);border-color:var(--gold);color:var(--ink)}
+.admin-analysis-panel{display:grid;gap:20px}
+.admin-filter-panel{background:var(--surface);border:1px solid rgba(232,184,75,.12);border-radius:10px;padding:20px 22px}
+.admin-filter-label{font-family:'Space Mono';font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-bottom:14px}
+.admin-event-filter-row{display:flex;flex-wrap:wrap;gap:10px}
+.admin-event-chip{background:transparent;border:1px solid rgba(232,184,75,.25);color:var(--muted);padding:10px 16px;border-radius:100px;font-family:'Space Mono';font-size:10px;letter-spacing:1.1px;text-transform:uppercase;cursor:pointer;transition:all .2s}
+.admin-event-chip:hover,.admin-event-chip.active{background:var(--gold);border-color:var(--gold);color:var(--ink)}
+.admin-analysis-summary{display:grid;grid-template-columns:minmax(220px,280px) 1fr;gap:14px;align-items:stretch}
+.admin-analysis-selection{background:var(--card);border:1px solid rgba(232,184,75,.12);border-radius:8px;padding:18px 20px;display:flex;align-items:center;color:var(--muted);font-size:13px;line-height:1.8}
+.admin-analysis-selection strong{color:var(--cream)}
+.admin-analysis-empty{padding:20px 22px;color:var(--muted)}
 
 /* MODAL */
 .modal-bg{position:fixed;inset:0;z-index:800;background:rgba(5,5,10,.92);backdrop-filter:blur(16px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;padding:24px}
@@ -641,7 +654,10 @@ footer{background:var(--deep);border-top:1px solid rgba(232,184,75,.08);padding:
   .admin-nav{order:3;width:100%;justify-content:center;flex-wrap:wrap}
   .admin-meta{width:100%;justify-content:center;flex-wrap:wrap}
   .admin-page-wrap{padding:160px 14px 56px}
+  .admin-section-head{flex-direction:column}
+  .admin-logout-btn{width:100%}
   .admin-stat-grid{grid-template-columns:1fr}
+  .admin-analysis-summary{grid-template-columns:1fr}
 }
 @media(max-width:600px){
   .events-grid{grid-template-columns:1fr;gap:12px}

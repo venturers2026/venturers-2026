@@ -7,6 +7,7 @@ import AdminAuthPage from './pages/AdminAuthPage';
 import AdminPanelPage from './pages/AdminPanelPage';
 import LandingPage from './pages/LandingPage';
 import PendingRequestsPage from './pages/PendingRequestsPage';
+import ParticipantsAnalysisPage from './pages/ParticipantsAnalysisPage';
 
 function AdminEntryRedirect() {
   const session = getAdminSession();
@@ -24,6 +25,7 @@ export default function App() {
 
         <Route element={<AdminRouteGuard />}>
           <Route path="/admin/panel" element={<AdminPanelPage />} />
+          <Route path="/admin/participants-analysis" element={<ParticipantsAnalysisPage />} />
           <Route path="/admin/pending-requests" element={<PendingRequestsPage />} />
         </Route>
 
