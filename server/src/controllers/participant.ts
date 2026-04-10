@@ -9,7 +9,7 @@ const EVENT_LIMITS: Record<string, number> = {
     'Wolf of Wall Street': 20, // Stock Market
     'Cric Auction': 24,
     'Shark Tank': 14,
-    'Game of Brands': 16,
+    'Game of Brands': 8,
     'Zero to One': 30,
 };
 
